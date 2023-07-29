@@ -6,17 +6,27 @@ from datetime import datetime, timedelta
 import pytz
 import json
 
-card_data = []
+card_data = set()
 
 def _store_purchase_data(trx_info):
     raw_items = trx_info["data"]
     created_date = trx_info["created_date"]
     items = json.loads(raw_items)
-    card_uid = items["cards"]
-    # card_id = carduid[0].split('-')[1]  # Split the card id string by '-' and get the 2nd part
-    price = items["price"]  # Extract the price
-    trx_id = trx_info["id"]
-    card_data.append({"card_uid": card_uid, "price": price, "created_date": created_date, "trx_id": trx_id})
+    # If items is a list of dicts, iterate through each item
+    if isinstance(items, list):
+        for item in items:
+            if "cards" in item:
+                card_uid = tuple(item["cards"])
+                price = item["price"]
+                trx_id = trx_info["id"]
+                card_data.add(tuple(sorted({"card_uid": card_uid, "price": price, "created_date": created_date, "trx_id": trx_id}.items())))
+    # If items is a dict, proceed as before
+    elif isinstance(items, dict):
+        if "cards" in items:
+            card_uid = items["cards"]
+            price = items["price"]
+            trx_id = trx_info["id"]
+            card_data.add(tuple(sorted({"card_uid": card_uid, "price": price, "created_date": created_date, "trx_id": trx_id}.items())))
 
 def _check_transaction_success(trx_id):
     api = Api()
