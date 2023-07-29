@@ -1,0 +1,3 @@
+beem==0.24.26
+pytz
+-e git+https://github.com/Edition-X/splinterlands-python-sdk.git@getting_started#egg=SplinterlandsSDK
