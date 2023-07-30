@@ -15,7 +15,10 @@ def _store_purchase_data(trx_info, card_data):
             continue
         card_uids = [(card,) for card in item["cards"]]
         for card_uid in card_uids:
-            card_data.add(tuple(sorted({"card_uid": card_uid, "price": item["price"],
+            card_uid_string = card_uid[0]
+            parts = card_uid_string.split('-')
+            card_id = parts[1]
+            card_data.add(tuple(sorted({"card_uid": card_uid, "card_id": card_id, "price": item["price"],
                                         "created_date": trx_info["created_date"], "trx_id": trx_info["id"]}.items())))
 
     return card_data
