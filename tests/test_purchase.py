@@ -1,7 +1,7 @@
 import unittest
 from main import _store_purchase_data
 
-class TestScript(unittest.TestCase):
+class TestPurchaseData(unittest.TestCase):
 
     def test_store_purchase_data_with_list(self):
         card_data = set()
